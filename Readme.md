@@ -27,12 +27,13 @@ https://github.com/topy190675/SFX-100-MulticontrollerSetup/releases
 
 
 ## How can someone be sure + test if this extension really is used and works as expected?
+a.
 - Launch Simfeedback with debug logging enabled (SimFeedbackStart.exe -d 2)
 - Check SimFeedbackLog.log in /log subdirectory 
-- Look for entries containing "SFX-100 ProgCtrl"
+- Look for entries containing "SFX-100 Multicontroller-Setup"
 
-This small extension is based on my research and concepts developed by SimFeedBack community (especially daCujo, Dsl71) 
-and especially SFX-100 motion controller project's mastermind Saxxon.
+This extension is based on my own research and some concepts developed by SimFeedBack community (in particular I would like
+to name here daCujo, Dsl71) and especially SFX-100 motion controller project's mastermind Saxxon.
 
 **Please really support this fantastic project.**
 https://opensfx.com
