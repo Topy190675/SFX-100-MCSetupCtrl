@@ -28,6 +28,12 @@ https://github.com/topy190675/SFX-100-MulticontrollerSetup/releases
 
 ## How can someone be sure + test if this extension really is used and works as expected?
 a.
+- Launch Simfeedback and switch to tab named "Extensions"
+- Check in this window if extension named "SFX-100 Multi-Controller Setup" has been started
+
+OR
+
+b.
 - Launch Simfeedback with debug logging enabled (SimFeedbackStart.exe -d 2)
 - Check SimFeedbackLog.log in /log subdirectory 
 - Look for entries containing "SFX-100 Multicontroller-Setup"
