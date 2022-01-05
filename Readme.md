@@ -7,10 +7,10 @@ Multi-Controller setup. This is nice because SimFeedback just provides GUI for i
   defect since Windows most commonly will declare different Arduino with new COM port to avoid issue). Selection of controller to work on
   is done from drop-down list
 - delete an existing controller configuration from active (useful if old, no longer needed controller has been removed)
-FUTURE FUNCTION that will be implemented on next release
-- this extension always creates a backup of your SimFeedback configuration (XML based) in advance of any change is done / written to your
-  existing software config (previous XML config backups can be found within your SFB installation directory named "SimFeedback-bkp?.xml"
-  where ? represents a number counting upwards with each save operation in advance of new created or edit / changed file will be saved) 
+
+FYI: this extension always creates a backup of your SimFeedback configuration (XML based) in advance of any change is done / written to your
+     existing software config (previous XML config backups can be found within your SFB installation directory named "SimFeedback-bkp?.xml"
+     where "?" represents a number counting upwards with each save operation in advance of new created or edit / changed file will be saved).
   
 
 # Installation  
