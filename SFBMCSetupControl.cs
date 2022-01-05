@@ -23,6 +23,10 @@ namespace SFX100MCSetup
         /// Mode parameter to decide if add or edit on multi-controller setting should be performed
         /// </summary>
         bool EditModeActive = false;
+        /// <summary>
+        /// Mode parameter to decide if during activated edit on multi-controller setting delete operation should be performed
+        /// </summary>
+        bool DeleteModeActive = false;
 
         public SFBMCSetupControl(MCSetupExtension mcSetupExtension, SimFeedback.extension.SimFeedbackExtensionFacade facade)
         {
@@ -58,7 +62,7 @@ namespace SFX100MCSetup
         }
 
         /* 12.10.2021 */
-        private int Add_Update_SFBConfig(int ControllerIdToAdd, bool Update)
+        private int Add_Update_SFBConfig(int ControllerIdToAdd, bool Update, /* 04.01.2022 */ bool Delete)
         {
             int RetVal = 0;
             try
@@ -73,6 +77,9 @@ namespace SFX100MCSetup
                 // int pLastFrom = 0;
                 int pTo = 0;
                 string result = String.Empty;
+
+                /* 04.01.2022 */
+
                 if (Update)
                 {
                     bool ControllerFound = false;
@@ -132,6 +139,12 @@ namespace SFX100MCSetup
                             pFrom = tfExt.SFBXMLConfig.IndexOf(xmlControllerStartStringId);                            
                             pTo = tfExt.SFBXMLConfig.IndexOf(xmlControllerEndStringId) + xmlControllerEndStringId.Length;
                             */
+                            /* 04.01.2022 */
+                            if (Delete)
+                            {
+                                pFrom = pUpdateFrom;
+                                pTo = pUpdateTo;
+                            }
                         }
                         else
                         {
@@ -307,20 +320,37 @@ namespace SFX100MCSetup
 
                     /* 22.11.2021 */
                     if (Update)
-                    /* Replace-Mode at the defined range in XML-section */
-                        tfExt.SFBXMLConfig = tfExt.SFBXMLConfig.Replace(result, NewResult);
+                    {
+                        if (!Delete)
+                            /* Replace-Mode at the defined range in XML-section */
+                            tfExt.SFBXMLConfig = tfExt.SFBXMLConfig.Replace(result, NewResult);
+                        /* 04.01.2022 */
+                        else
+                            tfExt.SFBXMLConfig = tfExt.SFBXMLConfig.Replace(result, string.Empty); // (pFrom, pTo - pFrom);
+
+                        /* Ende 04.01.2022 */
+                    }
                     else
-                    /* Add-Mode at the end of XML-section */
+                        /* Add-Mode at the end of XML-section */
                         tfExt.SFBXMLConfig = tfExt.SFBXMLConfig.Insert(pTo + 1, NewResult);
-                    
+
                     /* 23.11.2021 : DEBUG */
-                    if (MessageBox.Show("Overtake new MC-configuration ?", "SFB Multi-Controller Setup - GUI config", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                    /* 04.01.2022 : Zusatz fuer DELETE-Funktion */
+                    string GUI_Message = string.Empty;
+
+                    if (!Delete)
+                        GUI_Message = "Overtake new MC-configuration ?";
+                    else
+                        GUI_Message = "Overtake new MC-configuration with deleted controller ?";
+
+
+                    if (MessageBox.Show(GUI_Message, "SFB Multi-Controller Setup - GUI config", MessageBoxButtons.YesNo) == DialogResult.Yes)
                     {
                         System.IO.File.WriteAllText(tfExt.SFBConfigPfad, tfExt.SFBXMLConfig);
                         RetVal = 1;  // Code success overtaking setting
                     }
                     else
-                        RetVal = -1; // Code for theoretical success but user-intervention => not saved
+                        RetVal = -1; // Code for theoretical success but user-intervention => not saved                    
                 }
             }
             catch (Exception ex)
@@ -474,14 +504,38 @@ namespace SFX100MCSetup
 
                 btnEditController.Enabled = false;
                 btnAddController.Enabled = false;
+                /* 04.01.2022 : DELETE Button */
+                btnDeleteController.Enabled = false;
             }
+        }
+
+        private void BackupConfig()
+        {
+            // erstelle Backup der SFB-Config
+            string BackupConfigPath = System.IO.Path.GetDirectoryName(tfExt.SFBConfigPfad);
+            string BackupConfigFile = System.IO.Path.GetFileNameWithoutExtension(tfExt.SFBConfigPfad) + "-bkp";
+            string BackupConfigFileExt = System.IO.Path.GetExtension(tfExt.SFBConfigPfad);
+            int BkpFileCounter = 0;
+            string SFBConfigFileBackup = string.Empty;
+
+            do
+            {
+                SFBConfigFileBackup = System.IO.Path.Combine(BackupConfigPath, BackupConfigFile + Convert.ToString(BkpFileCounter) + BackupConfigFileExt);
+                BkpFileCounter++;
+            }
+            while (System.IO.File.Exists(SFBConfigFileBackup));
+
+            System.IO.File.Copy(tfExt.SFBConfigPfad, SFBConfigFileBackup);
         }
 
         private void buttonApply_Click(object sender, EventArgs e)
         {
             if (tfExt.IsRunning)
-            { 
+            {
                 // erstelle Backup der SFB-Config
+                BackupConfig(); /* 04.01.2022 : in eigene Funktion verschoben */
+
+                /*
                 string BackupConfigPath = System.IO.Path.GetDirectoryName(tfExt.SFBConfigPfad);
                 string BackupConfigFile = System.IO.Path.GetFileNameWithoutExtension(tfExt.SFBConfigPfad) + "-bkp";
                 string BackupConfigFileExt = System.IO.Path.GetExtension(tfExt.SFBConfigPfad);
@@ -496,6 +550,7 @@ namespace SFX100MCSetup
                 while (System.IO.File.Exists(SFBConfigFileBackup));
 
                 System.IO.File.Copy(tfExt.SFBConfigPfad, SFBConfigFileBackup);
+                */
 
                 // speichere neue Multi-Controller-Configuration anhand User-Settings
                 MCSetupExtension.MultiControllerInfo NewCtrlToAdd;
@@ -571,13 +626,13 @@ namespace SFX100MCSetup
                     }
                     */
 
-                    int SaveAfterAdd_Edit = Add_Update_SFBConfig(NewCtrlId , EditModeActive);
+                    int SaveAfterAdd_Edit = Add_Update_SFBConfig(NewCtrlId , EditModeActive, /* 04.01.2022 */ DeleteModeActive);
 
                     if (SaveAfterAdd_Edit > 0)
                         ResetGUIModeAfterAdd_Cancel();
                     else
                         if (SaveAfterAdd_Edit != -1)
-                        Log("something went wrong while adding new defined multi-controller config ! ");                  
+                        Log("something went wrong while adding new defined multi-controller config ! ");     
                 }
                 else
                     Log("unavailable Controller-Port used. New controller cannot be added to config !");
@@ -625,6 +680,9 @@ namespace SFX100MCSetup
 
                 btnEditController.Enabled = false;
                 btnAddController.Enabled = false;
+                /* 04.01.2022 : DELETE Button */
+                btnDeleteController.Enabled = true;
+
 
                 groupBoxNewControllerConfig.Enabled = true;
                 GetAvailableControllerPorts();
@@ -673,6 +731,8 @@ namespace SFX100MCSetup
 
             btnAddController.Enabled = true;
             btnEditController.Enabled = true;
+            /* 04.01.2022 : DELETE Button */
+            btnDeleteController.Enabled = false;
         }
 
         private void buttonCancel_Click(object sender, EventArgs e)
@@ -684,6 +744,54 @@ namespace SFX100MCSetup
         {
             ProcessStartInfo sInfo = new ProcessStartInfo(labelLink.Text);
             Process.Start(sInfo);
+        }
+
+        private void btnDeleteController_Click(object sender, EventArgs e)
+        {
+            if (tfExt.IsRunning)
+            {
+                //EditModeActive = true;
+                DeleteModeActive = true;
+                btnAddController.Enabled = false;
+                btnEditController.Enabled = false;
+
+                if (comboBoxID.SelectedIndex != -1)
+                {
+                    int SelectedControllerID = Convert.ToByte(comboBoxID.Text) - 1;
+                    groupBoxNewControllerConfig.Enabled = false;
+
+                    //if (MessageBox.Show("Delete selected MC-configuration now?", "SFB Multi-Controller Setup - GUI config", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                    {
+                        BackupConfig();
+                        int SaveAfterAdd_Edit = Add_Update_SFBConfig(SelectedControllerID, EditModeActive, /* 04.01.2022 */ DeleteModeActive);
+
+                        if (SaveAfterAdd_Edit > 0)
+                        {
+                            tfExt.CurrentMCCount--;
+                            tfExt.MCCountRefresh = true;
+
+                            ResetGUIModeAfterAdd_Cancel();                            
+                            
+                            /* 04.01.2022 : Reload neue XML-Config */
+                            MessageBox.Show("Please restart SimFeedback now ! Updated configuration will be loaded and shown on restart", "SFB Multi-Controller Setup - GUI config", MessageBoxButtons.OK);
+                        }
+                        else
+                        {
+                            if (SaveAfterAdd_Edit != -1)
+                                Log("something went wrong while adding new defined multi-controller config ! ");
+                        }
+                        EditModeActive = false;
+                        DeleteModeActive = false;
+
+                        /* 04.01.2022 : DELETE Button */
+                        btnDeleteController.Enabled = false;
+                    }
+                }
+                else
+                    MessageBox.Show("To use delete function first select corresponding controller's no. (none selected yet)", "SFB Multi-Controller Setup - GUI config", MessageBoxButtons.OK);
+
+                DeleteModeActive = false;
+            }
         }
     }
 }

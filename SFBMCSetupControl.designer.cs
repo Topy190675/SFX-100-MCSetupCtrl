@@ -50,6 +50,7 @@ namespace SFX100MCSetup
             this.timerRefresh = new System.Windows.Forms.Timer(this.components);
             this.comboBoxID = new System.Windows.Forms.ComboBox();
             this.btnEditController = new System.Windows.Forms.Button();
+            this.btnDeleteController = new System.Windows.Forms.Button();
             this.groupBoxLog.SuspendLayout();
             this.groupBoxNewControllerConfig.SuspendLayout();
             this.SuspendLayout();
@@ -67,18 +68,18 @@ namespace SFX100MCSetup
             // groupBoxLog
             // 
             this.groupBoxLog.Controls.Add(this.logBox);
-            this.groupBoxLog.Location = new System.Drawing.Point(10, 140);
+            this.groupBoxLog.Location = new System.Drawing.Point(10, 150);
             this.groupBoxLog.Name = "groupBoxLog";
-            this.groupBoxLog.Size = new System.Drawing.Size(373, 177);
+            this.groupBoxLog.Size = new System.Drawing.Size(415, 177);
             this.groupBoxLog.TabIndex = 4;
             this.groupBoxLog.TabStop = false;
             this.groupBoxLog.Text = "found config";
             // 
             // logBox
             // 
-            this.logBox.Location = new System.Drawing.Point(0, 13);
+            this.logBox.Location = new System.Drawing.Point(6, 11);
             this.logBox.Name = "logBox";
-            this.logBox.Size = new System.Drawing.Size(375, 160);
+            this.logBox.Size = new System.Drawing.Size(405, 160);
             this.logBox.TabIndex = 0;
             this.logBox.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.logBox_MouseDoubleClick);
             // 
@@ -134,7 +135,7 @@ namespace SFX100MCSetup
             this.groupBoxNewControllerConfig.Controls.Add(this.textBoxControllerName);
             this.groupBoxNewControllerConfig.Controls.Add(this.labelMCId);
             this.groupBoxNewControllerConfig.Enabled = false;
-            this.groupBoxNewControllerConfig.Location = new System.Drawing.Point(10, 95);
+            this.groupBoxNewControllerConfig.Location = new System.Drawing.Point(10, 105);
             this.groupBoxNewControllerConfig.Name = "groupBoxNewControllerConfig";
             this.groupBoxNewControllerConfig.Size = new System.Drawing.Size(375, 40);
             this.groupBoxNewControllerConfig.TabIndex = 18;
@@ -143,7 +144,7 @@ namespace SFX100MCSetup
             // buttonCancel
             // 
             this.buttonCancel.Image = global::SFX100MultiControllerSetup.Properties.Resources.cancel_15x15;
-            this.buttonCancel.Location = new System.Drawing.Point(315, 11);
+            this.buttonCancel.Location = new System.Drawing.Point(315, 10);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(50, 25);
             this.buttonCancel.TabIndex = 22;
@@ -153,7 +154,7 @@ namespace SFX100MCSetup
             // buttonApply
             // 
             this.buttonApply.Image = global::SFX100MultiControllerSetup.Properties.Resources.apply_15x15;
-            this.buttonApply.Location = new System.Drawing.Point(250, 11);
+            this.buttonApply.Location = new System.Drawing.Point(250, 10);
             this.buttonApply.Name = "buttonApply";
             this.buttonApply.Size = new System.Drawing.Size(50, 25);
             this.buttonApply.TabIndex = 21;
@@ -164,7 +165,7 @@ namespace SFX100MCSetup
             // 
             this.labelCOMPort.AutoSize = true;
             this.labelCOMPort.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelCOMPort.Location = new System.Drawing.Point(126, 13);
+            this.labelCOMPort.Location = new System.Drawing.Point(126, 14);
             this.labelCOMPort.Name = "labelCOMPort";
             this.labelCOMPort.Size = new System.Drawing.Size(38, 16);
             this.labelCOMPort.TabIndex = 20;
@@ -180,14 +181,14 @@ namespace SFX100MCSetup
             "2",
             "3",
             "4"});
-            this.comboBoxCOMs.Location = new System.Drawing.Point(171, 11);
+            this.comboBoxCOMs.Location = new System.Drawing.Point(171, 12);
             this.comboBoxCOMs.Name = "comboBoxCOMs";
             this.comboBoxCOMs.Size = new System.Drawing.Size(55, 21);
             this.comboBoxCOMs.TabIndex = 19;
             // 
             // textBoxControllerName
             // 
-            this.textBoxControllerName.Location = new System.Drawing.Point(40, 12);
+            this.textBoxControllerName.Location = new System.Drawing.Point(40, 13);
             this.textBoxControllerName.Name = "textBoxControllerName";
             this.textBoxControllerName.Size = new System.Drawing.Size(80, 20);
             this.textBoxControllerName.TabIndex = 18;
@@ -196,7 +197,7 @@ namespace SFX100MCSetup
             // 
             this.labelMCId.AutoSize = true;
             this.labelMCId.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelMCId.Location = new System.Drawing.Point(7, 13);
+            this.labelMCId.Location = new System.Drawing.Point(7, 14);
             this.labelMCId.Name = "labelMCId";
             this.labelMCId.Size = new System.Drawing.Size(27, 16);
             this.labelMCId.TabIndex = 17;
@@ -226,7 +227,7 @@ namespace SFX100MCSetup
             "2",
             "3",
             "4"});
-            this.comboBoxID.Location = new System.Drawing.Point(355, 69);
+            this.comboBoxID.Location = new System.Drawing.Point(351, 69);
             this.comboBoxID.Name = "comboBoxID";
             this.comboBoxID.Size = new System.Drawing.Size(30, 21);
             this.comboBoxID.TabIndex = 20;
@@ -236,7 +237,7 @@ namespace SFX100MCSetup
             // 
             // btnEditController
             // 
-            this.btnEditController.Location = new System.Drawing.Point(310, 68);
+            this.btnEditController.Location = new System.Drawing.Point(305, 68);
             this.btnEditController.Name = "btnEditController";
             this.btnEditController.Size = new System.Drawing.Size(40, 23);
             this.btnEditController.TabIndex = 21;
@@ -244,11 +245,22 @@ namespace SFX100MCSetup
             this.btnEditController.UseVisualStyleBackColor = true;
             this.btnEditController.Click += new System.EventHandler(this.btnEditController_Click);
             // 
+            // btnDeleteController
+            // 
+            this.btnDeleteController.Location = new System.Drawing.Point(388, 68);
+            this.btnDeleteController.Name = "btnDeleteController";
+            this.btnDeleteController.Size = new System.Drawing.Size(40, 23);
+            this.btnDeleteController.TabIndex = 22;
+            this.btnDeleteController.Text = "Del";
+            this.btnDeleteController.UseVisualStyleBackColor = true;
+            this.btnDeleteController.Click += new System.EventHandler(this.btnDeleteController_Click);
+            // 
             // SFBMCSetupControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.Controls.Add(this.btnDeleteController);
             this.Controls.Add(this.btnEditController);
             this.Controls.Add(this.comboBoxID);
             this.Controls.Add(this.labelCtrlCount);
@@ -260,7 +272,7 @@ namespace SFX100MCSetup
             this.Controls.Add(this.lblControllerCount);
             this.Controls.Add(this.labelHeadline);
             this.Name = "SFBMCSetupControl";
-            this.Size = new System.Drawing.Size(394, 322);
+            this.Size = new System.Drawing.Size(434, 332);
             this.groupBoxLog.ResumeLayout(false);
             this.groupBoxNewControllerConfig.ResumeLayout(false);
             this.groupBoxNewControllerConfig.PerformLayout();
@@ -289,5 +301,6 @@ namespace SFX100MCSetup
         private System.Windows.Forms.ComboBox comboBoxID;
         private System.Windows.Forms.Button btnEditController;
         private System.Windows.Forms.Button buttonCancel;
+        private System.Windows.Forms.Button btnDeleteController;
     }
 }
