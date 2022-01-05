@@ -14,7 +14,7 @@ FYI: this extension always creates a backup of your SimFeedback configuration (X
   
 
 # Installation  
-Do not click on the green Download button on this page. This would download the sources only.  
+Do not click on the green Download button on this page. This would download the sources (if available) only.  
 Download the files from the releases page instead or download latest version below 
 
 https://github.com/topy190675/SFX-100-MulticontrollerSetup/releases
